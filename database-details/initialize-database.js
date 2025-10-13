@@ -5,6 +5,7 @@ const auth = require('./create-scripts/create-tables/auth');
 const notification = require('./create-scripts/create-tables/notification');
 const audit = require('./create-scripts/create-tables/audit');
 const lov = require('./create-scripts/create-tables/lov');
+const property = require('./create-scripts/create-tables/property');
 const { createFunctionsAndTriggers } = require("./create-scripts/create-functions-triggers");
 
 const initializeDatabase = async (sequelize, DataTypes, db) => {
@@ -14,10 +15,13 @@ const initializeDatabase = async (sequelize, DataTypes, db) => {
 
         // Creating extensions
         await createExtensions(db);
+
+        // Creating tables
         await lov.initialize(sequelize, DataTypes, db);
         await auth.initialize(sequelize, DataTypes, db);
         await notification.initialize(sequelize, DataTypes, db);
         await audit.initialize(sequelize, DataTypes, db);
+        await property.initialize(sequelize, DataTypes, db);
 
         if (process.env.DATABASE_REFRESH === "true") {
             await createFunctionsAndTriggers(db);

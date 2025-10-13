@@ -10,35 +10,6 @@ module.exports = (sequelize) => {
                 primaryKey: true,
                 unique: true,
             },
-            firstName: {
-                type: DataTypes.STRING(150),
-                validate: {
-                    len: {
-                        args: [1, 150],
-                        msg: 'First name must be between 1 and 150 characters.',
-                    },
-                },
-            },
-            secondName: {
-                type: DataTypes.STRING(150),
-                validate: {
-                    len: {
-                        args: [1, 150],
-                        msg: 'Second name must be between 1 and 150 characters.',
-                    },
-                },
-            },
-            genderId: {
-                type: DataTypes.UUID,
-                references: {
-                    model: {
-                        tableName: 'gender',
-                        schema: 'lov',
-                    },
-                    key: 'gender_id',
-                },
-                allowNull: true
-            },
             phoneNumber: {
                 type: DataTypes.STRING(10),
                 allowNull: false,
@@ -52,22 +23,6 @@ module.exports = (sequelize) => {
                     len: {
                         args: [10, 10],
                         msg: 'Phone number must be exactly 10 digits.',
-                    },
-                },
-            },
-            email: {
-                type: DataTypes.STRING(500),
-                allowNull: true,
-                unique: {
-                    msg: 'Email address already exists.',
-                },
-                validate: {
-                    isEmail: {
-                        msg: 'Email address must be valid.',
-                    },
-                    len: {
-                        args: [1, 500],
-                        msg: 'Email address must be between 1 and 500 characters.',
                     },
                 },
             },
@@ -89,7 +44,7 @@ module.exports = (sequelize) => {
             schema: 'auth',
             tableName: 'user_master',
             timestamps: false,
-            comment: 'This table will store all the users information along with their phone numbers and the upvote for the sellers as well.',
+            comment: 'This table will store all the users information that log in to the application along with their phone numbers.',
             underscored: true,
             hasTrigger: true,
             freezeTableName: true,
@@ -98,12 +53,7 @@ module.exports = (sequelize) => {
                     name: 'idx_user_master_phone_number',
                     unique: true,
                     fields: ['phone_number'],
-                },
-                {
-                    name: 'idx_user_master_email',
-                    unique: true,
-                    fields: ['email'],
-                },
+                }
             ]
         }
     );
