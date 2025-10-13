@@ -1,0 +1,11 @@
+# IDE Files
+.idea
+
+# NPM Package
+node_modules
+
+# Configuration
+.env
+
+# Logs
+logs
