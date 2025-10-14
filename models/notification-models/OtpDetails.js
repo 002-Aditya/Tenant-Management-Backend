@@ -11,7 +11,7 @@ module.exports = (sequelize) => {
                 unique: true,
             },
             otp: {
-                type: DataTypes.STRING(4),
+                type: DataTypes.STRING(6),
                 allowNull: false,
             },
             messageSid: {

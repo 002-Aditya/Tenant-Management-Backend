@@ -13,7 +13,7 @@ const sendSMS = async (message, to = process.env.TWILIO_RECEIVE_PHONE_NUMBER) =>
         return { success: true, message: sentMessage.sid, statusCode: 200 };
     } catch (error) {
         logger.error(`Error occurred while sending SMS: ${error.message || error}`);
-        return { success: false, message: `Error occurred while sending SMS: ${error.message || error}`, statusCode: 500 };
+        return { success: false, message: `Error occurred while sending SMS: ${error.message || error}. Please try again.`, statusCode: 500 };
     }
 };
 
