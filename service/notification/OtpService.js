@@ -1,5 +1,4 @@
 const db = require('../../utils/database/db-init').db;
-const { filterData } = require('../../utils/data-filteration/filter-data');
 const OtpDetails = db.OtpDetails;
 
 const OtpDetailsService = {
