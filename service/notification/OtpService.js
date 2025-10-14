@@ -19,7 +19,10 @@ const OtpDetailsService = {
         try {
             const updatedRecord = await OtpDetails.update(otpRecord, {
                 transaction: t,
-                returning: true
+                returning: true,
+                where: {
+                    otpId : otpRecord.otpId
+                }
             });
             return { success: true, message: updatedRecord[1][0], statusCode: 201 };
         } catch (e) {
@@ -35,9 +38,10 @@ const OtpDetailsService = {
                     latest: true,
                     userId: userId
                 },
-                raw: true
+                raw: true,
+                order: [['createdAt', 'DESC']]
             });
-            if (record.length === 0) return { success: false, message: record, statusCode: 204 };
+            if (!record || record.length === 0) return { success: false, message: `Please retry sending OTP again.`, statusCode: 404 };
             return { success: true, message: record, statusCode: 200 };
         } catch (e) {
             return { success: false, message: `Error occurred while fetching OTP Record.`, statusCode: 500 };
@@ -52,7 +56,7 @@ const OtpDetailsService = {
                 },
                 raw: true
             });
-            if (records.length === 0) return { success: true, message: records, statusCode: 204 };
+            if (records.length === 0) return { success: true, message: records, statusCode: 404 };
             return { success: true, message: records, statusCode: 200 };
         } catch (e) {
             return { success: false, message: `Error occurred while fetching OTP Details on User Id.`, statusCode: 500 };

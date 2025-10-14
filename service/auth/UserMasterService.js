@@ -1,5 +1,4 @@
 const db = require('../../utils/database/db-init').db;
-const { filterData } = require('../../utils/data-filteration/filter-data');
 const UserMaster = db.UserMaster;
 const OtpDetailsService = require('../notification/OtpService');
 const { sequelize } = require("../../utils/database/db");
@@ -26,7 +25,7 @@ const findUserByPhoneNumber = async (phoneNumber) => {
             attributes: { exclude: ['createdOn', 'modifiedOn'] },
             raw: true,
         });
-        if (!data) return { success: true, statusCode: 204, message: `No data available` };
+        if (!data) return { success: true, statusCode: 404, message: `No user available with the given phone number.` };
         return { success: true, statusCode: 200, message: data };
     } catch (e) {
         return { success: false, message: `Error occurred while fetching all active users upon contact numbers.`, statusCode: 500 };
@@ -44,7 +43,7 @@ const UserMasterService = {
                 attributes: { exclude: ['createdOn', 'modifiedOn'] },
                 raw: true,
             });
-            if (data.length === 0) return { success: true, statusCode: 204, message: `No data available` };
+            if (data.length === 0) return { success: true, statusCode: 404, message: `No data available` };
             return { success: true, statusCode: 200, message: data };
         } catch (e) {
             return { success: false, message: `Error occurred while fetching all active users: ${e.message}`, statusCode: 500 };
@@ -82,6 +81,28 @@ const UserMasterService = {
         } catch (e) {
             await t.rollback();
             return { success: false, statusCode: 500, message: `Error occurred while generating otp: ${e.message}.` };
+        }
+    },
+
+    async validateOtp(phoneNumber, actualOtp) {
+        const t = await sequelize.transaction();
+        try {
+            const verifyPhoneNumber = await findUserByPhoneNumber(phoneNumber);
+            if (!verifyPhoneNumber.success || verifyPhoneNumber.statusCode === 404) return verifyPhoneNumber;
+            const userId = verifyPhoneNumber.message.userId;
+            const fetchOtpDetails = await OtpDetailsService.fetchLatestAndActiveOtp(userId);
+            if (!fetchOtpDetails.success) return fetchOtpDetails;
+            const { expiresAt, otp, otpId } = fetchOtpDetails.message;
+            const isExpired = new Date(expiresAt) < new Date();
+            if (isExpired) return { success: false, message: `OTP has been expired. Try sending another OTP.`, statusCode: 410 };
+            if (actualOtp !== otp) return { success: false, message: `Invalid OTP. Try again with another OTP.`, statusCode: 401 };
+            const updateOtp = await OtpDetailsService.updateRecord({ otpId: otpId, isActive: false }, t);
+            if (!updateOtp.success) return updateOtp;
+            await t.commit();
+            return { success: true, message: userId, statusCode: 202 };
+        } catch (e) {
+            await t.rollback();
+            return { success: false, message: `Error occurred while validating OTP: ${e.message}.`, statusCode: 500 };
         }
     }
 
