@@ -1,16 +1,16 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-    const GenderDetails = sequelize.define(
-        'gender',
+    const PropertyType = sequelize.define(
+        'property_type',
         {
-            genderId: {
+            propertyTypeId: {
                 type: DataTypes.UUID,
                 defaultValue: DataTypes.UUIDV1,
                 primaryKey: true,
                 unique: true,
             },
-            genderName: {
+            propertyTypeName: {
                 type: DataTypes.STRING(100),
                 allowNull: false
             },
@@ -21,14 +21,14 @@ module.exports = (sequelize) => {
         },
         {
             schema: 'lov',
-            tableName: 'gender',
+            tableName: 'property_type',
             timestamps: false,
-            comment: 'This table will be used to store the genders info.',
+            comment: 'This table will be used to store the property type.',
             underscored: true,
             hasTrigger: true,
             freezeTableName: true
         }
     );
 
-    return GenderDetails;
+    return PropertyType;
 };

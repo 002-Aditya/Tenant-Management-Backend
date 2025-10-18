@@ -5,7 +5,8 @@ const auth = require('./create-scripts/create-tables/auth');
 const notification = require('./create-scripts/create-tables/notification');
 const audit = require('./create-scripts/create-tables/audit');
 const lov = require('./create-scripts/create-tables/lov');
-const property = require('./create-scripts/create-tables/property');
+const property = require('./create-scripts/create-tables/owner');
+const { insertBulkData } = require('./bulk-data-insertion/insert-bulk-data');
 const { createFunctionsAndTriggers } = require("./create-scripts/create-functions-triggers");
 
 const initializeDatabase = async (sequelize, DataTypes, db) => {
@@ -25,6 +26,7 @@ const initializeDatabase = async (sequelize, DataTypes, db) => {
 
         if (process.env.DATABASE_REFRESH === "true") {
             await createFunctionsAndTriggers(db);
+            await insertBulkData(db);
         }
         logger.info('Database schemas and models initialized successfully');
     } catch (err) {

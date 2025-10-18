@@ -71,6 +71,10 @@ module.exports = (sequelize) => {
                     },
                 },
             },
+            numTenantProperties: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+            },
             createdBy: {
                 type: DataTypes.UUID,
                 references: {
