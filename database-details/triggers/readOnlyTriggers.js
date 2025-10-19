@@ -8,7 +8,9 @@ async function createReadOnlyTriggers(db) {
     // List of schema-table pairs where read-only triggers should be applied
     const readOnlyTables = [
         { schema: 'audit', table: 'logged_actions' },
-        { schema: 'lov', table: 'gender' }
+        { schema: 'lov', table: 'gender' },
+        { schema: 'lov', table: 'property_type' },
+        { schema: 'lov', table: 'relationship' }
     ];
 
     for (const { schema, table } of readOnlyTables) {

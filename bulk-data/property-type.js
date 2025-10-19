@@ -4,7 +4,6 @@ const propertyData = [
     { propertyTypeName: "Apartment" },
     { propertyTypeName: "Flat" },
     { propertyTypeName: "Pent House" },
-    { propertyTypeName: "Condo" },
     { propertyTypeName: "Villa" },
     { propertyTypeName: "Studio Apartment" },
     { propertyTypeName: "Bungalow" },

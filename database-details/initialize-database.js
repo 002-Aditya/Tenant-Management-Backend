@@ -6,6 +6,7 @@ const notification = require('./create-scripts/create-tables/notification');
 const audit = require('./create-scripts/create-tables/audit');
 const lov = require('./create-scripts/create-tables/lov');
 const property = require('./create-scripts/create-tables/owner');
+const tenant = require('./create-scripts/create-tables/tenant');
 const { insertBulkData } = require('./bulk-data-insertion/insert-bulk-data');
 const { createFunctionsAndTriggers } = require("./create-scripts/create-functions-triggers");
 
@@ -23,6 +24,7 @@ const initializeDatabase = async (sequelize, DataTypes, db) => {
         await notification.initialize(sequelize, DataTypes, db);
         await audit.initialize(sequelize, DataTypes, db);
         await property.initialize(sequelize, DataTypes, db);
+        await tenant.initialize(sequelize, DataTypes, db);
 
         if (process.env.DATABASE_REFRESH === "true") {
             await createFunctionsAndTriggers(db);

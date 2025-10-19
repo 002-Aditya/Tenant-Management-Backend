@@ -12,7 +12,8 @@ module.exports = (sequelize) => {
             },
             propertyTypeName: {
                 type: DataTypes.STRING(100),
-                allowNull: false
+                allowNull: false,
+                unique: true
             },
             isActive: {
                 type: DataTypes.BOOLEAN,

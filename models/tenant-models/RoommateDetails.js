@@ -1,51 +1,45 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-    const PropertyDetails = sequelize.define(
-        'property_details',
+    const RoommateDetails = sequelize.define(
+        'roommate_details',
         {
-            propertyId: {
+            roommateId: {
                 type: DataTypes.UUID,
                 defaultValue: DataTypes.UUIDV1,
                 primaryKey: true,
                 unique: true,
             },
-            ownerId: {
+            tenantId: {
                 type: DataTypes.UUID,
                 references: {
                     model: {
-                        tableName: 'owner_details',
-                        schema: 'owner',
+                        tableName: 'tenant_details',
+                        schema: 'tenant',
                     },
-                    key: 'owner_id',
+                    key: 'tenant_id',
                 },
                 allowNull: false
             },
-            address: {
-                type: DataTypes.TEXT,
+            roommateName: {
+                type: DataTypes.STRING(300),
+                validate: {
+                    len: {
+                        args: [1, 300],
+                        msg: 'Name must be between 1 and 300 characters.',
+                    },
+                },
                 allowNull: false,
             },
-            propertyTypeId: {
+            relationshipId: {
                 type: DataTypes.UUID,
                 references: {
                     model: {
-                        tableName: 'property_type',
+                        tableName: 'relationship',
                         schema: 'lov',
                     },
-                    key: 'property_type_id',
+                    key: 'relationship_id',
                 },
-                allowNull: false
-            },
-            totalRooms: {
-                type: DataTypes.INTEGER,
-                allowNull: false,
-            },
-            filledRooms: {
-                type: DataTypes.INTEGER,
-                allowNull: false,
-            },
-            emptyRooms: {
-                type: DataTypes.INTEGER,
                 allowNull: false,
             },
             createdBy: {
@@ -74,32 +68,25 @@ module.exports = (sequelize) => {
             },
         },
         {
-            schema: 'owner',
-            tableName: 'property_details',
+            schema: 'tenant',
+            tableName: 'roommate_details',
             timestamps: false,
-            comment: 'This table will be used to store all the owner details of the owner.',
+            comment: 'This table will be used to store personal basic information of roommates of tenants.',
             underscored: true,
             hasTrigger: true,
             freezeTableName: true,
             indexes: [
                 {
-                    name: 'idx_owner_id',
-                    fields: ['owner_id'],
+                    name: 'idx_tenant_id',
+                    fields: ['tenant_id'],
                 },
                 {
-                    name: 'idx_property_type_id',
-                    fields: ['property_type_id'],
+                    name: 'idx_relationship_id',
+                    fields: ['relationship_id'],
                 }
             ],
-            validate: {
-                validateRequiredFields() {
-                    if (!this.address || !this.propertyTypeId || !this.totalRooms || !this.filledRooms || !this.emptyRooms || !this.createdBy) {
-                        throw new Error('Either of the mandatory fields are not provided.');
-                    }
-                },
-            },
         }
     );
 
-    return PropertyDetails;
+    return RoommateDetails;
 };

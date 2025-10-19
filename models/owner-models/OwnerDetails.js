@@ -113,6 +113,14 @@ module.exports = (sequelize) => {
                     name: 'idx_user_master_email',
                     unique: true,
                     fields: ['email'],
+                },
+                {
+                    name: 'idx_gender_id',
+                    fields: ['gender_id'],
+                },
+                {
+                    name: 'idx_created_by',
+                    fields: ['created_by'],
                 }
             ],
             validate: {
