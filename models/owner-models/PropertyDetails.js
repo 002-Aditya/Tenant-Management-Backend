@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-    const OwnerDetails = sequelize.define(
+    const PropertyDetails = sequelize.define(
         'property_details',
         {
             propertyId: {
@@ -77,7 +77,7 @@ module.exports = (sequelize) => {
             schema: 'owner',
             tableName: 'property_details',
             timestamps: false,
-            comment: 'This table will be used to store all the property details of the owner.',
+            comment: 'This table will be used to store all the owner details of the owner.',
             underscored: true,
             hasTrigger: true,
             freezeTableName: true,
@@ -91,5 +91,5 @@ module.exports = (sequelize) => {
         }
     );
 
-    return OwnerDetails;
+    return PropertyDetails;
 };
